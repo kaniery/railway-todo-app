@@ -8,7 +8,6 @@
   display: flex;
   justify-content: space-between;
 }
-
 .list-menu {
   text-align: right;
 }
@@ -17,22 +16,22 @@
   list-style: none;
   display: flex;
   overflow-x: auto;
-}
 
-.list-tab-item {
-  flex-shrink: 0;
-  width: 100px;
-  padding: 0 25px;
-  text-overflow: normal;
-  margin-right: 5px;
-  border: solid 1px #242F9B;
-  justify-content: center;
-  align-items: center;
-}
+  .list-tab-item {
+    flex-shrink: 0;
+    width: 100px;
+    padding: 0 25px;
+    text-overflow: normal;
+    margin-right: 5px;
+    border: solid 1px #242f9b;
+    justify-content: center;
+    align-items: center;
+  }
 
-.active {
-  background-color: #242F9B;
-  color: #ffffff;
+  &.active {
+    background-color: #242f9b;
+    color: #ffffff;
+  }
 }
 
 .tasks {
@@ -52,14 +51,14 @@
   padding-left: 25px;
   font-size: large;
   border: solid 1px #ffffff;
-}
 
-.task-item-link {
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  color: #000000;
+  .task-item-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: #000000;
+  }
 }
 
 .error-message {
