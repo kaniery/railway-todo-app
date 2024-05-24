@@ -5,23 +5,34 @@ import { url } from "../const";
 import { Header } from "../components/Header";
 import "./newTask.scss";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 
 export const NewTask = () => {
   const [selectListId, setSelectListId] = useState();
   const [lists, setLists] = useState([]);
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
+  const [limit, setLimit] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [cookies] = useCookies();
+  const [startDate, setStartDate] = useState(new Date());
   const history = useNavigate();
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
   const handleSelectList = (id) => setSelectListId(id);
+
+  const formatDate = (date) => {
+    return format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+  };
+
   const onCreateTask = () => {
     const data = {
       title: title,
       detail: detail,
       done: false,
+      limit: limit,
     };
 
     axios
@@ -54,6 +65,11 @@ export const NewTask = () => {
       });
   }, []);
 
+  useEffect(() => {
+    setLimit(formatDate(startDate));
+    console.log(limit);
+  }, [startDate]);
+
   return (
     <div>
       <Header />
@@ -80,6 +96,17 @@ export const NewTask = () => {
             type="text"
             onChange={handleTitleChange}
             className="new-task-title"
+          />
+          <br />
+          <label>期日</label>
+          <br />
+          <DatePicker
+            dateFormat="yyyy-MM-dd hh:mm"
+            showTimeSelect
+            selected={startDate}
+            closeOnScroll={true}
+            onChange={(date) => setStartDate(date)}
+            placeholderText="Select a day"
           />
           <br />
           <label>詳細</label>
