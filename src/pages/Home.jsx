@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
+//import { useCookies } from "react-cookie";
 import axios from "axios";
 import { Header } from "../components/Header";
-import { url } from "../const";
+import { url, token } from "../const";
 import "./home.scss";
+import { format } from "date-fns";
 
 export const Home = () => {
   const [isDoneDisplay, setIsDoneDisplay] = useState("todo"); // todo->未完了 done->完了
@@ -12,13 +13,13 @@ export const Home = () => {
   const [selectListId, setSelectListId] = useState();
   const [tasks, setTasks] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const [cookies] = useCookies();
+  //const [cookies] = useCookies();
   const handleIsDoneDisplayChange = (e) => setIsDoneDisplay(e.target.value);
   useEffect(() => {
     axios
       .get(`${url}/lists`, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
@@ -36,7 +37,7 @@ export const Home = () => {
       axios
         .get(`${url}/lists/${listId}/tasks`, {
           headers: {
-            authorization: `Bearer ${cookies.token}`,
+            authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
@@ -53,7 +54,7 @@ export const Home = () => {
     axios
       .get(`${url}/lists/${id}/tasks`, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
@@ -142,7 +143,7 @@ const Tasks = (props) => {
               >
                 {task.title}
                 <br />
-                {task.done ? "完了" : "未完了"}
+                {"期限：" + format(task.limit, "MM/dd HH:mm")}
               </Link>
             </li>
           ))}
@@ -164,7 +165,7 @@ const Tasks = (props) => {
             >
               {task.title}
               <br />
-              {task.done ? "完了" : "未完了"}
+              {"期限：" + format(task.limit, "MM/dd HH:mm")}
             </Link>
           </li>
         ))}

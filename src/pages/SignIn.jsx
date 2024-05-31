@@ -27,6 +27,7 @@ export const SignIn = () => {
         history.push("/");
       })
       .catch((err) => {
+        console.log();
         setErrorMessage(`サインインに失敗しました。${err}`);
       });
   };

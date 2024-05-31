@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
+//import { useCookies } from "react-cookie";
 import axios from "axios";
-import { url } from "../const";
+import { url, token } from "../const";
 import { Header } from "../components/Header";
 import "./newTask.scss";
 import { useNavigate } from "react-router-dom";
@@ -16,9 +16,9 @@ export const NewTask = () => {
   const [detail, setDetail] = useState("");
   const [limit, setLimit] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [cookies] = useCookies();
+  //const [cookies] = useCookies();
   const [startDate, setStartDate] = useState(new Date());
-  const history = useNavigate();
+  const nav = useNavigate();
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
   const handleSelectList = (id) => setSelectListId(id);
@@ -38,11 +38,11 @@ export const NewTask = () => {
     axios
       .post(`${url}/lists/${selectListId}/tasks`, data, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then(() => {
-        history.push("/");
+        nav("/");
       })
       .catch((err) => {
         setErrorMessage(`タスクの作成に失敗しました。${err}`);
@@ -53,7 +53,7 @@ export const NewTask = () => {
     axios
       .get(`${url}/lists`, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
@@ -67,7 +67,6 @@ export const NewTask = () => {
 
   useEffect(() => {
     setLimit(formatDate(startDate));
-    console.log(limit);
   }, [startDate]);
 
   return (
