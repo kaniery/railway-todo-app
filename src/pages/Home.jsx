@@ -5,7 +5,7 @@ import axios from "axios";
 import { Header } from "../components/Header";
 import { url, token } from "../const";
 import "./home.scss";
-import { format } from "date-fns";
+import { format, differenceInMinutes } from "date-fns";
 
 export const Home = () => {
   const [isDoneDisplay, setIsDoneDisplay] = useState("todo"); // todo->未完了 done->完了
@@ -123,6 +123,38 @@ export const Home = () => {
   );
 };
 
+// 期限と残り時間の計算
+const TaskItem = ({ task, selectListId }) => {
+  const limitDate = new Date(task.limit);
+  const remainingMinutes = differenceInMinutes(limitDate, new Date());
+  const remainingtime = () => {
+    if (remainingMinutes < 0) {
+      return "時間切れ";
+    } else {
+      const days = Math.trunc(remainingMinutes / 1440);
+      const hour = Math.trunc((remainingMinutes % 1440) / 60);
+      const minutes = Math.trunc((remainingMinutes % 1440) % 60);
+
+      return "残り時間:" + days + "日" + hour + "時間" + minutes + "分";
+    }
+  };
+
+  return (
+    <li className="task-item">
+      <Link
+        to={`/lists/${selectListId}/tasks/${task.id}`}
+        className="task-item-link"
+      >
+        {task.title}
+        <br />
+        {"期限：" + format(task.limit, "MM/dd HH:mm")}
+        <br />
+        {remainingtime()}
+      </Link>
+    </li>
+  );
+};
+
 // 表示するタスク
 const Tasks = (props) => {
   const { tasks, selectListId, isDoneDisplay } = props;
@@ -136,16 +168,7 @@ const Tasks = (props) => {
             return task.done === true;
           })
           .map((task, key) => (
-            <li key={key} className="task-item">
-              <Link
-                to={`/lists/${selectListId}/tasks/${task.id}`}
-                className="task-item-link"
-              >
-                {task.title}
-                <br />
-                {"期限：" + format(task.limit, "MM/dd HH:mm")}
-              </Link>
-            </li>
+            <TaskItem key={key} task={task} selectListId={selectListId} />
           ))}
       </ul>
     );
@@ -155,19 +178,10 @@ const Tasks = (props) => {
     <ul>
       {tasks
         .filter((task) => {
-          return task.done === false;
+          return task.done === true;
         })
         .map((task, key) => (
-          <li key={key} className="task-item">
-            <Link
-              to={`/lists/${selectListId}/tasks/${task.id}`}
-              className="task-item-link"
-            >
-              {task.title}
-              <br />
-              {"期限：" + format(task.limit, "MM/dd HH:mm")}
-            </Link>
-          </li>
+          <TaskItem key={key} task={task} selectListId={selectListId} />
         ))}
     </ul>
   );
