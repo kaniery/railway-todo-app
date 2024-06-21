@@ -64,6 +64,7 @@ export const Home = () => {
         setErrorMessage(`タスクの取得に失敗しました。${err}`);
       });
   };
+
   return (
     <div>
       <Header />
@@ -125,8 +126,8 @@ export const Home = () => {
 
 // 期限と残り時間の計算
 const TaskItem = ({ task, selectListId }) => {
-  const limitDate = new Date(task.limit);
-  const remainingMinutes = differenceInMinutes(limitDate, new Date());
+  const now = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'");
+  const remainingMinutes = differenceInMinutes(task.limit, now);
   const remainingtime = () => {
     if (remainingMinutes < 0) {
       return "時間切れ";
@@ -139,6 +140,14 @@ const TaskItem = ({ task, selectListId }) => {
     }
   };
 
+  const localDate = (limit) => {
+    const date = new Date(limit);
+    const timezoneOffset = date.getTimezoneOffset() * 60000;
+    const localtime = new Date(date.getTime() + timezoneOffset);
+
+    return format(localtime, "MM/dd HH:mm");
+  };
+
   return (
     <li className="task-item">
       <Link
@@ -147,7 +156,7 @@ const TaskItem = ({ task, selectListId }) => {
       >
         {task.title}
         <br />
-        {"期限：" + format(task.limit, "MM/dd HH:mm")}
+        {"期限：" + localDate(task.limit)}
         <br />
         {remainingtime()}
       </Link>
@@ -178,7 +187,7 @@ const Tasks = (props) => {
     <ul>
       {tasks
         .filter((task) => {
-          return task.done === true;
+          return task.done === false;
         })
         .map((task, key) => (
           <TaskItem key={key} task={task} selectListId={selectListId} />

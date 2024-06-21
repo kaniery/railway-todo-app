@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
+//import { useCookies } from "react-cookie";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Navigate } from "react-router-dom";
 import { signIn } from "../authSlice";
@@ -16,7 +16,7 @@ export const SignUp = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessge] = useState();
-  const [cookies, setCookie, removeCookie] = useCookies();
+  //const [cookies, setCookie, removeCookie] = useCookies();
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handleNameChange = (e) => setName(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -29,10 +29,10 @@ export const SignUp = () => {
 
     axios
       .post(`${url}/users`, data)
-      .then((res) => {
-        const token = res.data.token;
+      .then(() => {
+        //const token = res.data.token;
         dispatch(signIn());
-        setCookie("token", token);
+        //setCookie("token", token);
         history.push("/");
       })
       .catch((err) => {

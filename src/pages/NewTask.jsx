@@ -31,7 +31,7 @@ export const NewTask = () => {
     const data = {
       title: title,
       detail: detail,
-      done: true,
+      done: false,
       limit: limit,
     };
 

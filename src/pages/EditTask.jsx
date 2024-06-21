@@ -1,26 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../components/Header";
 import axios from "axios";
-import { useCookies } from "react-cookie";
-import { url } from "../const";
+//import { useCookies } from "react-cookie";
+import { url, token } from "../const";
 import { useNavigate, useParams } from "react-router-dom";
 import "./editTask.scss";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 
 export const EditTask = () => {
-  const history = useNavigate();
+  const nav = useNavigate();
   const { listId, taskId } = useParams();
-  const [cookies] = useCookies();
+  //const [cookies] = useCookies();
+  const [startDate, setStartDate] = useState(new Date());
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
+  const [limit, setLimit] = useState("");
   const [isDone, setIsDone] = useState();
   const [errorMessage, setErrorMessage] = useState("");
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
   const handleIsDoneChange = (e) => setIsDone(e.target.value === "done");
+  const formatDate = (date) => {
+    return format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+  };
   const onUpdateTask = () => {
     console.log(isDone);
     const data = {
       title: title,
+      limit: limit,
       detail: detail,
       done: isDone,
     };
@@ -28,12 +37,12 @@ export const EditTask = () => {
     axios
       .put(`${url}/lists/${listId}/tasks/${taskId}`, data, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         console.log(res.data);
-        history.push("/");
+        nav("/");
       })
       .catch((err) => {
         setErrorMessage(`更新に失敗しました。${err}`);
@@ -44,11 +53,11 @@ export const EditTask = () => {
     axios
       .delete(`${url}/lists/${listId}/tasks/${taskId}`, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then(() => {
-        history.push("/");
+        nav("/");
       })
       .catch((err) => {
         setErrorMessage(`削除に失敗しました。${err}`);
@@ -59,7 +68,7 @@ export const EditTask = () => {
     axios
       .get(`${url}/lists/${listId}/tasks/${taskId}`, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
@@ -72,6 +81,10 @@ export const EditTask = () => {
         setErrorMessage(`タスク情報の取得に失敗しました。${err}`);
       });
   }, []);
+
+  useEffect(() => {
+    setLimit(formatDate(startDate));
+  }, [startDate]);
 
   return (
     <div>
@@ -87,6 +100,17 @@ export const EditTask = () => {
             onChange={handleTitleChange}
             className="edit-task-title"
             value={title}
+          />
+          <br />
+          <label>期日</label>
+          <br />
+          <DatePicker
+            dateFormat="yyyy-MM-dd hh:mm"
+            showTimeSelect
+            selected={startDate}
+            closeOnScroll={true}
+            onChange={(date) => setStartDate(date)}
+            placeholderText="Select a day"
           />
           <br />
           <label>詳細</label>
