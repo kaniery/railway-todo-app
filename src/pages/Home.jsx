@@ -90,14 +90,35 @@ export const Home = () => {
               return (
                 <li
                   key={key}
+                  role="tab"
+                  id={`tab-${list.tab}`}
                   className={`list-tab-item ${isActive ? "active" : ""}`}
+                  aria-selected={isActive}
+                  aria-controls={`panel-${list.id}`}
                   onClick={() => handleSelectList(list.id)}
+                  tabIndex={isActive ? 0 : -1}
                 >
-                  {list.title}
+                  <button className={`tab-button ${isActive ? "active" : ""}`}>
+                    {list.title}
+                  </button>
                 </li>
               );
             })}
           </ul>
+          {lists.map((list, key) => {
+            const isActive = list.id === selectListId;
+            return (
+              <div
+                key={key}
+                role="tabpanel"
+                id={`panel-${list.id}`}
+                aria-labelledby={`tab-${list.id}`}
+                hidden={!isActive}
+              >
+                <p>{list.title}</p>
+              </div>
+            );
+          })}
           <div className="tasks">
             <div className="tasks-header">
               <h2>タスク一覧</h2>
