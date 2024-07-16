@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
+//import { useCookies } from "react-cookie";
 import axios from "axios";
 import { Header } from "../components/Header";
 import { useNavigate } from "react-router-dom";
-import { url } from "../const";
+import { url, token } from "../const";
 import "./newList.scss";
 
 export const NewList = () => {
-  const [cookies] = useCookies();
-  const history = useNavigate();
+  //const [cookies] = useCookies();
+  const nav = useNavigate();
   const [title, setTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const handleTitleChange = (e) => setTitle(e.target.value);
@@ -20,11 +20,11 @@ export const NewList = () => {
     axios
       .post(`${url}/lists`, data, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then(() => {
-        history.push("/");
+        nav("/");
       })
       .catch((err) => {
         setErrorMessage(`リストの作成に失敗しました。${err}`);

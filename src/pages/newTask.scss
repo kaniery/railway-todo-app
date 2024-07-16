@@ -31,3 +31,16 @@
 .error-message {
   color: #ff3333;
 }
+
+@media screen and (max-width: 959px) {
+  .new-task {
+    width: auto;
+    margin: 0 auto;
+  }
+}
+@media screen and (max-width: 480px) {
+  .new-task {
+    width: auto;
+    margin: 0 auto;
+  }
+}

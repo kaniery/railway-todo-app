@@ -21,3 +21,16 @@
     border-radius: 5px;
   }
 }
+
+@media screen and (max-width: 959px) {
+  .new-list {
+    width: auto;
+    margin: 0 auto;
+  }
+}
+@media screen and (max-width: 480px) {
+  .new-list {
+    width: auto;
+    margin: 0 auto;
+  }
+}

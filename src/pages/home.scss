@@ -26,6 +26,8 @@
     border: solid 1px #242f9b;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
   }
 
   &.active {
@@ -81,15 +83,6 @@
   margin: 0;
 }
 
-.list-tab-item {
-  margin-right: 5px;
-  padding: 0;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
 .list-tab-item.active {
   background-color: #007bff;
   color: white;
@@ -99,10 +92,11 @@
 .tab-button {
   background: none;
   border: none;
-  padding: 10px 20px;
+  padding: 0 20px;
   color: inherit;
   cursor: pointer;
   outline: none;
+  font-size: 18px;
 }
 
 .tab-button.active {
@@ -115,8 +109,32 @@
   text-decoration: underline;
 }
 
-[role="tabpanel"] {
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin-top: -1px;
+@media screen and (max-width: 959px) {
+  .taskList {
+    margin: auto;
+    list-style: none;
+    width: auto;
+  }
+  .list-header {
+    display: initial;
+    justify-content: left;
+  }
+}
+@media screen and (max-width: 480px) {
+  .taskList {
+    margin: auto;
+    list-style: none;
+    width: auto;
+  }
+  .tasks-header {
+    display: initial;
+    justify-content: initial;
+  }
+  .list-menu {
+    text-align: left;
+  }
+  .list-header {
+    display: initial;
+    justify-content: left;
+  }
 }

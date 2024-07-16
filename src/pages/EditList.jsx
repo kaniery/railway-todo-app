@@ -1,17 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
+//import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../components/Header";
-import { url } from "../const";
+import { url, token } from "../const";
 import "./editList.scss";
 
 export const EditList = () => {
-  const history = useNavigate();
+  const nav = useNavigate();
   const { listId } = useParams();
   const [title, setTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [cookies] = useCookies();
+  //const [cookies] = useCookies();
   const handleTitleChange = (e) => setTitle(e.target.value);
   const onUpdateList = () => {
     const data = {
@@ -21,11 +21,11 @@ export const EditList = () => {
     axios
       .put(`${url}/lists/${listId}`, data, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then(() => {
-        history.push("/");
+        nav("/");
       })
       .catch((err) => {
         setErrorMessage(`更新に失敗しました。 ${err}`);
@@ -36,11 +36,11 @@ export const EditList = () => {
     axios
       .delete(`${url}/lists/${listId}`, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then(() => {
-        history.push("/");
+        nav("/");
       })
       .catch((err) => {
         setErrorMessage(`削除に失敗しました。${err}`);
@@ -51,7 +51,7 @@ export const EditList = () => {
     axios
       .get(`${url}/lists/${listId}`, {
         headers: {
-          authorization: `Bearer ${cookies.token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {

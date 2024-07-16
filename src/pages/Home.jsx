@@ -105,20 +105,6 @@ export const Home = () => {
               );
             })}
           </ul>
-          {lists.map((list, key) => {
-            const isActive = list.id === selectListId;
-            return (
-              <div
-                key={key}
-                role="tabpanel"
-                id={`panel-${list.id}`}
-                aria-labelledby={`tab-${list.id}`}
-                hidden={!isActive}
-              >
-                <p>{list.title}</p>
-              </div>
-            );
-          })}
           <div className="tasks">
             <div className="tasks-header">
               <h2>タスク一覧</h2>
@@ -169,13 +155,22 @@ const TaskItem = ({ task, selectListId }) => {
     return format(localtime, "MM/dd HH:mm");
   };
 
+  const textContent = (text) => {
+    const len = 15;
+    if (text.length > len) {
+      return text.substring(0, len) + "...";
+    } else {
+      return text;
+    }
+  };
+
   return (
     <li className="task-item">
       <Link
         to={`/lists/${selectListId}/tasks/${task.id}`}
         className="task-item-link"
       >
-        {task.title}
+        {textContent(task.title)}
         <br />
         {"期限：" + localDate(task.limit)}
         <br />
